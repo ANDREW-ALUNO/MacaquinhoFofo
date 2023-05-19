@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { Audio } from "expo-av";
 export default class SoundButton extends Component {
+    constructor(){
+        super()
+        this.state = {
+            pressedButtonIndex:''
+        }
+    }
     playSound = async (soundChunk) => {
         var soundLink = 'https://s3-whitehatjrcontent.whjr.online/phones/' + soundChunk + '.mp3';
         await Audio.Sound.createAsync({
@@ -13,8 +19,18 @@ export default class SoundButton extends Component {
     }
     render() {
         return (
-            <TouchableOpacity style={styles.chunkButton} onPress={() => { this.playSound(this.props.phone) }}>
-                <Text style={styles.displayText}>
+            <TouchableOpacity 
+            style={this.props.buttonIndex == this.state.pressedButtonIndex?
+                [styles.chunkButton,{backgroundColor:'white'}]:
+                [styles.chunkButton,{backgroundColor:'red'}]} 
+            onPress={() => {
+                this.setState({
+                    pressedButtonIndex:this.props.buttonIndex
+                })
+                this.playSound(this.props.phone) }}>
+                <Text style = {this.props.buttonIndex == this.state.pressedButtonIndex?
+                [styles.displayText,{color:'red'}]:
+                [styles.displayText,{color:'white'}]} >
                     {this.props.chunk}
 
                 </Text>
